@@ -5,7 +5,7 @@
  * @brief uuid的生成
  * @version 2.6.0
  */
-
+#pragma once
 #include <iostream>
 #include <chrono>
 #include <random>

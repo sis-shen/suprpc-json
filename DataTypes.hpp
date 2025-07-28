@@ -5,7 +5,7 @@
  * @brief 消息数据对象定义
  * @version 1.6.0
  */
-
+#pragma once
 #include <string>
 #include <unordered_map>
 

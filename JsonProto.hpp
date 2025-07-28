@@ -5,7 +5,7 @@
  * @brief Json序列化与反序列化
  * @version 2.6.0
  */
-
+#pragma once
 #include <iostream>
 #include <sstream>
 #include <string>
