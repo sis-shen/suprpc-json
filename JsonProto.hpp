@@ -17,6 +17,8 @@
  * @param val 输出的json对象
  * @param body 报文字符串
  */
+namespace suprpc
+{
 static bool serialize(const Json::Value &val, std::string &body)
 {
     std::stringstream ss;
@@ -50,4 +52,5 @@ static bool unserialize(const std::string &body, Json::Value &val)
         return false;
     }
     return true;
+}
 }

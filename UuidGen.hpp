@@ -14,10 +14,11 @@
 #include <atomic>
 #include <iomanip>
 
+
+namespace suprpc{
 /**
  * @brief 生成uuid
  */
-
 static std::string uuid()
 {
    std::stringstream ss;
@@ -41,4 +42,5 @@ static std::string uuid()
       ss << std::setw(2) << std::setfill('0') << std::hex << ((cur >> (i * 8)) & 0xFF);
    }
    return ss.str();
+}
 }
