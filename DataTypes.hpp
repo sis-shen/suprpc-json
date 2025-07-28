@@ -9,19 +9,19 @@
 #include <string>
 #include <unordered_map>
 
-#define KEY_METHOD      "method"
-#define KEY_PARAMS      "parameters"
-#define KEY_TOPIC_KEY   "topic_key"
-#define KEY_OPTYPE      "optype"
-#define KEY_HOST        "host"
-#define KEY_HOST_IP     "ip"
-#define KEY_HOST_port   "port"
-#define KEY_RCODE       "rcode"
-#define KEY_RESULT      "result"
+#define KEY_METHOD "method"
+#define KEY_PARAMS "parameters"
+#define KEY_TOPIC_KEY "topic_key"
+#define KEY_OPTYPE "optype"
+#define KEY_HOST "host"
+#define KEY_HOST_IP "ip"
+#define KEY_HOST_port "port"
+#define KEY_RCODE "rcode"
+#define KEY_RESULT "result"
 
 namespace suprpc
 {
-        /**
+    /**
      * @class Type
      * @brief 消息类型定义
      */
@@ -34,7 +34,7 @@ namespace suprpc
         REQ_SERVICE,
         RSP_SERVICE
     };
-        /**
+    /**
      * @class RCode
      * @brief 错误码定义
      */
@@ -59,45 +59,45 @@ namespace suprpc
      */
     static std::string errReason(RCode code)
     {
-        static std::unordered_map<RCode,std::string> err_map = {
-            {RCode::RCODE_OK,           "处理成功！"},
+        static std::unordered_map<RCode, std::string> err_map = {
+            {RCode::RCODE_OK, "处理成功！"},
             {RCode::RCODE_PARSE_FAILED, "消息处理失败！"},
-            {RCode::RCODE_ERROR_MSGTYPE,"消息类型错误！"},
-            {RCode::RCODE_INVALID_MSG,  "非法消息！"},
+            {RCode::RCODE_ERROR_MSGTYPE, "消息类型错误！"},
+            {RCode::RCODE_INVALID_MSG, "非法消息！"},
             {RCode::RCODE_DISCONNECTED, "联机已断开！"},
-            {RCode::RCODE_INVALID_PARAMS,"非法参数！"},
-            {RCode::RCODE_NOT_FOUND_SERVICE,"找不到对应的服务！"},
-            {RCode::RCODE_INVALID_OPTYPE,"无效的操作类型！"},
-            {RCode::RCODE_NOT_FOUND_TOPIC,"找不到对应的主题！"},
-            {RCode::RCODE_INTERNAL_ERROR,"内部错误！"}
-        };
+            {RCode::RCODE_INVALID_PARAMS, "非法参数！"},
+            {RCode::RCODE_NOT_FOUND_SERVICE, "找不到对应的服务！"},
+            {RCode::RCODE_INVALID_OPTYPE, "无效的操作类型！"},
+            {RCode::RCODE_NOT_FOUND_TOPIC, "找不到对应的主题！"},
+            {RCode::RCODE_INTERNAL_ERROR, "内部错误！"}};
         auto iter = err_map.find(code);
-        if(iter == err_map.end())
+        if (iter == err_map.end())
         {
             return "未知错误！";
         }
-        else 
+        else
         {
             return iter->second;
         }
-
     };
 
-            /**
+    /**
      * @class RType
      * @brief RPC请求类型定义
      */
-    enum class RType{
+    enum class RType
+    {
         REQ_ASYNC = 0,
         REQ_SYNC,
-        REQ_CALLBACK    
+        REQ_CALLBACK
     };
 
     /**
      * @class TopicOptype
      * @brief 主题相关操作定义
      */
-    enum class TopicOptype{
+    enum class TopicOptype
+    {
         TOPIC_CRAETE = 0,
         TOPIC_REMOVE,
         TOPIC_SUBSCRIBE,
@@ -109,7 +109,8 @@ namespace suprpc
      * @class ServiceOptype
      * @brief 服务操作类型定义
      */
-    enum class ServiceOptype{
+    enum class ServiceOptype
+    {
         SERVICE_REGISTRY = 0,
         SERVICE_DISCOVERY,
         SERVICE_ONLINE,
@@ -117,5 +118,4 @@ namespace suprpc
         SERVICE_UNKOWN
     };
 
-    
 } // namespace suprpc
