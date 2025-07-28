@@ -3,7 +3,7 @@
  * @author supdriver
  * @date 2025-05-26
  * @brief spdlog日志器二次封装
- * @version 2.6.0
+ * @version 1.0.0
  */
 
 #pragma once
@@ -13,7 +13,7 @@
 #include <spdlog/async.h>
 #include <iostream>
 
-namespace btyGoose{
+namespace suprpc{
 extern std::shared_ptr<spdlog::logger> g_default_logger;//声明全局日志器
 
 /**
@@ -25,12 +25,12 @@ extern std::shared_ptr<spdlog::logger> g_default_logger;//声明全局日志器
  */
 void init_logger(bool debug_mode, const std::string &file, int32_t level);
 
-#define SUP_LOG_TRACE(format, ...) btyGoose::g_default_logger->trace(std::string("[{}:{}] ") + format, __FILE__, __LINE__, ##__VA_ARGS__)
-#define SUP_LOG_DEBUG(format, ...) btyGoose::g_default_logger->debug(std::string("[{}:{}] ") + format, __FILE__, __LINE__, ##__VA_ARGS__)
-#define SUP_LOG_INFO(format, ...) btyGoose::g_default_logger->info(std::string("[{}:{}] ") + format, __FILE__, __LINE__, ##__VA_ARGS__)
-#define SUP_LOG_WARN(format, ...) btyGoose::g_default_logger->warn(std::string("[{}:{}] ") + format, __FILE__, __LINE__, ##__VA_ARGS__)
-#define SUP_LOG_ERROR(format, ...) btyGoose::g_default_logger->error(std::string("[{}:{}] ") + format, __FILE__, __LINE__, ##__VA_ARGS__)
-#define SUP_LOG_FATAL(format, ...) btyGoose::g_default_logger->critical(std::string("[{}:{}] ") + format, __FILE__, __LINE__, ##__VA_ARGS__)
+#define SUP_LOG_TRACE(format, ...) suprpc::g_default_logger->trace(std::string("[{}:{}] ") + format, __FILE__, __LINE__, ##__VA_ARGS__)
+#define SUP_LOG_DEBUG(format, ...) suprpc::g_default_logger->debug(std::string("[{}:{}] ") + format, __FILE__, __LINE__, ##__VA_ARGS__)
+#define SUP_LOG_INFO(format, ...) suprpc::g_default_logger->info(std::string("[{}:{}] ") + format, __FILE__, __LINE__, ##__VA_ARGS__)
+#define SUP_LOG_WARN(format, ...) suprpc::g_default_logger->warn(std::string("[{}:{}] ") + format, __FILE__, __LINE__, ##__VA_ARGS__)
+#define SUP_LOG_ERROR(format, ...) suprpc::g_default_logger->error(std::string("[{}:{}] ") + format, __FILE__, __LINE__, ##__VA_ARGS__)
+#define SUP_LOG_FATAL(format, ...) suprpc::g_default_logger->critical(std::string("[{}:{}] ") + format, __FILE__, __LINE__, ##__VA_ARGS__)
 
 /**
  * @class ScopedTimer

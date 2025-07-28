@@ -3,12 +3,12 @@
  * @author supdriver
  * @date 2025-05-26
  * @brief 日志器二次封装的接口实现
- * @version 2.6.0
+ * @version 1.0.0
  */
 
 #include "logger.hpp"
 
-namespace btyGoose{
+namespace suprpc{
 std::shared_ptr<spdlog::logger> g_default_logger;
 void init_logger(bool debug_mode, const std::string &file, int32_t level)
 {
