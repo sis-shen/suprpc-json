@@ -22,10 +22,10 @@
 namespace suprpc
 {
     /**
-     * @class Type
+     * @class MType
      * @brief 消息类型定义
      */
-    enum class Type
+    enum class MType
     {
         REQ_RPC = 0,
         RSP_RPC,
