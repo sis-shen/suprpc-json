@@ -19,6 +19,7 @@
  */
 namespace suprpc
 {
+namespace JSON{
 static bool serialize(const Json::Value &val, std::string &body)
 {
     std::stringstream ss;
@@ -52,5 +53,6 @@ static bool unserialize(const std::string &body, Json::Value &val)
         return false;
     }
     return true;
+}
 }
 }
