@@ -40,7 +40,7 @@ static bool serialize(const Json::Value &val, std::string &body)
  * @param body 输出报文字符串
  * @param val 输入的json对象
  */
-static bool unserialize(const std::string &body, Json::Value &val)
+static bool deserialize(const std::string &body, Json::Value &val)
 {
     Json::CharReaderBuilder crb;
     std::string errs;
