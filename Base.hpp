@@ -41,16 +41,16 @@ namespace suprpc{
         virtual int32_t peekInt32() = 0;
         virtual void retrieveInt32() = 0;
         virtual int32_t readInt32() = 0;
-        virtual std::string retrieveAsString() = 0;
+        virtual std::string retrieveAsString(size_t len) = 0;
     };
 
     /**
      * @class BaseProtocol
      * @brief 协议类基类
      */
-    class BaseProrocol{
+    class BaseProtocol{
         public:
-        using ptr = std::shared_ptr<BaseProrocol>;
+        using ptr = std::shared_ptr<BaseProtocol>;
         virtual bool canProcessed(const BaseBuffer::ptr &buf) = 0;
         virtual bool onMessage(const BaseBuffer::ptr &buf,
             const BaseMessage::ptr &msg) = 0;
