@@ -210,8 +210,73 @@ namespace suprpc
         {}
         
         virtual void start()override{
-            
+            _server.setConnectionCallback(std::bind(&MuduoServer::onConnection,this,std::placeholders::_1));
+            _server.setMessageCallback(std::bind(&MuduoServer::onMessage,this,std::placeholders::_1,std::placeholders::_2,std::placeholders::_3));
+            _server.start();//先开始监听
+            _baseloop.loop();//开启死循环事件监控
         }
+
+        private:
+            void onConnection(const muduo::net::TcpConnectionPtr &conn){
+                if(conn->connected()){
+                    SUP_LOG_INFO("连接建立");
+                    auto muduo_conn = ConnectionFactory::create(conn,_protocol);
+                    {
+                        std::unique_lock<std::mutex> lock(_mutex);
+                        _conns.insert(std::make_pair(conn,muduo_conn));
+                    }
+                    if(_cb_connection) _cb_connection(muduo_conn);
+                }else{
+                    SUP_LOG_INFO("连接断开");
+                    BaseConnection::ptr muduo_conn;
+                    {
+                        std::unique_lock<std::mutex> lock(_mutex);
+                        auto it  = _conns.find(conn);
+                        if(it == _conns.end()){
+                            return;
+                        }
+                        muduo_conn = it->second;
+                        _conns.erase(conn);
+                    }
+                    if(_cb_close) _cb_close(muduo_conn);
+                }
+            }
+
+            void onMessage(const muduo::net::TcpConnectionPtr &conn,
+                    muduo::net::Buffer *buf,
+                    muduo::Timestamp){
+                SUP_LOG_DEBUG("开始处理数据");
+                auto base_buf = BufferFactory::create(buf);
+                while(1){
+                    if(_protocol->canProcessed(base_buf) == false){
+                        if(base_buf->readableSize() > max_data_size){
+                            conn->shutdown();
+                            SUP_LOG_ERROR("缓冲区中数据过大");
+                            return;
+                        }
+
+                        break;
+                    }
+                    BaseMessage::ptr msg;
+                    bool ret = _protocol->onMessage(base_buf,msg);
+                    if(ret == false){
+                        conn->shutdown();
+                        SUP_LOG_ERROR("缓冲区中数据错误");
+                        return;
+                    }
+                    BaseConnection::ptr base_conn;
+                    {
+                        std::unique_lock<std::mutex> lock(_mutex);
+                        auto it = _conns.find(conn);
+                        if(it == _conns.end()){
+                            conn->shutdown();
+                            return;
+                        }
+                        base_conn  = it->second;
+                    }
+                    if(_cb_message) _cb_message(base_conn,msg);
+                }
+            }
 
         void func(){}
         private:
@@ -221,6 +286,7 @@ namespace suprpc
         muduo::net::TcpServer _server;  
         std::mutex _mutex;
         std::unordered_map<muduo::net::TcpConnectionPtr,BaseConnection::ptr> _conns;
-    }
+    };
 
+    
 }
