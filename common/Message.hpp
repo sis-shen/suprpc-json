@@ -193,6 +193,7 @@ namespace suprpc
      */
     class RpcResponse : public JsonResponse
     {
+        public:
         using ptr = std::shared_ptr<RpcResponse>;
         virtual bool check() override
         {
