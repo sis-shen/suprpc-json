@@ -337,7 +337,7 @@ namespace suprpc
         }
 
         template <class T, class... Args>
-        static BaseMessage::ptr create(Args &&...args)
+        static std::shared_ptr<T> create(Args &&...args)
         {
             return std::make_shared<T>(std::forward(args)...);
         }
