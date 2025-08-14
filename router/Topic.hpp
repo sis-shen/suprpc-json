@@ -57,6 +57,35 @@ namespace suprpc{
 
             void topicRemove(const BaseConnection::ptr &conn,const TopicRequest::ptr &msg){
                 std::string topic_name = msg->topicKey();
+                std::unordered_set<Subscriber::ptr> subscribers;
+                {
+                    std::unique_lock<std::mutex> lock(_mutex);
+                    auto it = _topics.find(topic_name);
+                    if(it == _topics.end()){
+                        return ;
+                    }
+
+                    subscribers = it->second->_subscribers;
+                    _topics.erase(it);//删除当前主题的映射关系
+                }
+                for(auto &subscriber:subscribers){
+                    subscriber->removeTopic(topic_name);
+                }
+            }
+
+            bool topicSubscriber(const BaseConnection::ptr & conn,const TopicRequest::ptr &msg){
+                Topic::ptr topic;
+                Subscriber::ptr subscriber;
+                {
+                    std::unique_lock<std::mutex>lock(_mutex);
+                    auto topic_it = _topics.find(msg->topicKey());
+                    if(topic_it == _topics.end()){
+                        return false;
+                    }
+                    topic = topic_it->second;
+                    
+
+                }
             }
 
         private:
@@ -101,6 +130,10 @@ namespace suprpc{
                     }
                 }
             };
+            private:
+            std::mutex _mutex;
+            std::unordered_map<std::string,Topic::ptr> _topics;
+            std::unordered_map<std::string,Subscriber::ptr> _subscribers;
         };
 }
 }
