@@ -123,6 +123,7 @@ namespace suprpc
     class ServiceRequest : public JsonRequest
     {
     public:
+        using ptr = std::shared_ptr<ServiceRequest>;
         virtual bool check() override
         {
             if (_body[KEY_METHOD].isNull() == true ||
