@@ -122,6 +122,7 @@ namespace suprpc
      */
     class ServiceRequest : public JsonRequest
     {
+    public:
         virtual bool check() override
         {
             if (_body[KEY_METHOD].isNull() == true ||
