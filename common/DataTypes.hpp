@@ -127,6 +127,6 @@ namespace suprpc
         public:
         std::string first;
         int second;
-    }
+    };
 
 } // namespace suprpc
