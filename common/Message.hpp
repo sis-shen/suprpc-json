@@ -38,7 +38,7 @@ namespace suprpc
             return _body[KEY_METHOD].asString();
         }
 
-        void setMethos(const std::string &method)
+        void setMethod(const std::string &method)
         {
             _body[KEY_METHOD] = method;
         }
