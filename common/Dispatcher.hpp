@@ -30,12 +30,12 @@ namespace suprpc
     class CallbackT : public Callback
     {
     public:
-        using ptr = std::shared_ptr<CallbackT>;
+        using ptr = std::shared_ptr<CallbackT<T>>;
         using MessageCallback = std::function<void(const BaseConnection::ptr &conn,
-                                                   BaseMessage::ptr &msg)>;
+                                                 const std::shared_ptr<T> &msg)>;
         CallbackT(const MessageCallback &handler) : _handler(handler) {}
         void onMessage(const BaseConnection::ptr &conn,
-                       cont BaseMessage::ptr &msg)
+                       const BaseMessage::ptr &msg)
         {
             auto typemsg = std::dynamic_pointer_cast<T>(msg);
             _handler(conn, typemsg);
