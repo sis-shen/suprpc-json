@@ -73,8 +73,18 @@ namespace suprpc
 
             bool send(const BaseConnection::ptr &conn,
                       const BaseMessage::ptr &req,
-                      const RequestCallback &cb,
-                      BaseMessage::ptr &rsp)
+                      BaseMessage::ptr &rsp
+                ){
+                AsyncResponse rsp_future;
+                bool ret = send(conn,req,rsp_future);
+                if(ret == false) return false;
+                rsp = rsp_future.get();
+                return true;
+            }
+                     
+            bool send(const BaseConnection::ptr &conn,
+                      const BaseMessage::ptr &req,
+                      const RequestCallback &cb)
             {
                 RequestDescribe::ptr rdp = newDescribe(req, RType::REQ_CALLBACK, cb);
                 if (rdp.get() == nullptr)
