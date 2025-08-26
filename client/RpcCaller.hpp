@@ -83,7 +83,21 @@ namespace suprpc{
                         }
                 bool call(const BaseConnection::ptr &conn,const std::string&method,
                     const Json::Value &params,const JsonResponseCallback &cb){
-                        
+                        auto req_msg = MessageFactory::create<RpcRequest>();
+                        req_msg->setId(uuid());
+                        req_msg->setMType(MType::REQ_RPC);
+                        req_msg->setMethod(method);
+                        req_msg->setParams(params);
+
+                        Requestor::RequestCallback req_cb = std::bind(&RpcCaller::Callback_,this,
+                            cb,std::placeholders::_1
+                        );
+                        bool ret = _requestor->send(conn,std::dynamic_pointer_cast<BaseMessage>(req_msg),req_cb );
+                        if(ret == false){
+                            SUP_LOG_ERROR("回调rpc请求失败");
+                            return false;
+                        }
+                        return true;
                     }
             private:
             void Callback_(const JsonResponseCallback &cb,
@@ -97,7 +111,7 @@ namespace suprpc{
                         SUP_LOG_ERROR("rpc回调请求出错: %s",errReason(rpc_rsp_msg->rcode()));
                         return;
                     }
-                    cb(rpc_rsp_msg->result);
+                    cb(rpc_rsp_msg->result());
                 }
 
             void Callback(std::shared_ptr<std::promise<Json::Value>> result,
@@ -115,6 +129,8 @@ namespace suprpc{
                 }
             private:
                 Requestor::ptr _requestor;
-        }
+        };
+
+        
     }
 }
