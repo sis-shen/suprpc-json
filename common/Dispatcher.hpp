@@ -35,7 +35,7 @@ namespace suprpc
                                                  const std::shared_ptr<T> &msg)>;
         CallbackT(const MessageCallback &handler) : _handler(handler) {}
         void onMessage(const BaseConnection::ptr &conn,
-                       const BaseMessage::ptr &msg)
+                       BaseMessage::ptr &msg)
         {
             auto typemsg = std::dynamic_pointer_cast<T>(msg);
             _handler(conn, typemsg);
