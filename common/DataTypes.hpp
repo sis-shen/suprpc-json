@@ -127,6 +127,10 @@ namespace suprpc
         public:
         std::string first;
         int second;
+
+        bool operator==(const Address&addr){
+            return addr.first == first && addr.second == second;
+        }
     };
 
 } // namespace suprpc
