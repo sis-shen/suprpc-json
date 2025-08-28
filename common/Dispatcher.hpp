@@ -32,7 +32,7 @@ namespace suprpc
     public:
         using ptr = std::shared_ptr<CallbackT<T>>;
         using MessageCallback = std::function<void(const BaseConnection::ptr &conn,
-                                                 const std::shared_ptr<T> &msg)>;
+                                                   std::shared_ptr<T> &msg)>;
         CallbackT(const MessageCallback &handler) : _handler(handler) {}
         void onMessage(const BaseConnection::ptr &conn,
                        BaseMessage::ptr &msg)
