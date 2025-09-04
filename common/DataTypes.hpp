@@ -123,12 +123,17 @@ namespace suprpc
      * @class Address
      * @brief 地址类的封装
      */
-    class Address{
-        public:
+    class Address
+    {
+    public:
+        Address(const std::string &host, int port) : first(host), second(port)
+        {
+        }
         std::string first;
         int second;
 
-        bool operator==(const Address&addr){
+        bool operator==(const Address &addr)
+        {
             return addr.first == first && addr.second == second;
         }
     };
