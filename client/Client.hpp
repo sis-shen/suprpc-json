@@ -91,6 +91,7 @@ namespace suprpc{
          * @brief Rpc客户端
          */
         class RpcClient {
+        public:
             RpcClient(bool enableDiscovery,const std::string&ip,int port)
                 :_enableDiscovery(enableDiscovery),
                 _requestor(std::make_shared<Requestor>()),
