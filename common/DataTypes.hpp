@@ -126,7 +126,7 @@ namespace suprpc
     class Address
     {
     public:
-        Address(const std::string &host, int port) : first(host), second(port)
+        Address(const std::string &host="", int port=-1) : first(host), second(port)
         {
         }
         std::string first;

@@ -4,6 +4,8 @@
  */
 
  #include "../common/Dispatcher.hpp"
+ #include "../client/Client.hpp"
+ #include "../client/ClientTopic.hpp"
  #include "./Service.hpp"
  #include "./RpcRouter.hpp"
  #include "./Topic.hpp"
@@ -59,12 +61,50 @@
         class RpcServer{
             public:
             using ptr = std::shared_ptr<RpcServer>;
+            RpcServer(const Address&access_addr,
+                bool enableRegistry = false,
+                const Address &registry_server_addr = Address()):
+                _enableRegistry(enableRegistry),
+                _access_addr(access_addr),
+                _router(std::make_shared<suprpc::server::RpcRouter>()),
+                _dispatcher(std::make_shared<suprpc::Dispatcher>())
+                {
+                    if(enableRegistry) {
+                        _reg_client = std::make_shared<client::RegistryClient>(
+                            registry_server_addr.first,
+                            registry_server_addr.second);
+                    }
+                    auto rpc_cb = std::bind(&RpcRouter::onRpcRequest,_router.get(),
+                        std::placeholders::_1,std::placeholders::_2);
 
+                    _dispatcher->registerHandler<suprpc::RpcRequest>(
+                        suprpc::MType::REQ_RPC,rpc_cb
+                    );
+
+                    _server = suprpc::ServerFactory::create(access_addr.second);
+                    auto message_cb = std::bind(&Dispatcher::onMessage,_dispatcher.get(),
+                    std::placeholders::_1,std::placeholders::_2);
+                    _server->setMessageCallback(message_cb);
+                }
+
+                void registerMethod(const ServiceDescribe::ptr &service) {
+                    if(_enableRegistry) {
+                        _reg_client->registryMethod(service->method(),_access_addr);
+                    }
+                    _router->registerMethod(service);
+                }
+
+                void start() {
+                    _server->start();
+                }
 
             private:
                 bool _enableRegistry;
                 Address _access_addr;
-                
-        }
+                RpcRouter::ptr _router;
+                Dispatcher::ptr _dispatcher;
+                client::RegistryClient::ptr _reg_client;
+                BaseServer::ptr _server;
+        };
     }
  }

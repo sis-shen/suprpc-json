@@ -126,9 +126,19 @@ namespace suprpc
                 _callback = cb;
             }
 
+            void setParamsDesc(const std::string &pname, VType vtype)
+            {
+                _params_desc.emplace_back(ServiceDescribe::ParamDescribe(pname, vtype));
+            }
+
             void setParamsDesc(const std::vector<ServiceDescribe::ParamDescribe> &params_desc)
             {
                 _params_desc = params_desc;
+            }
+
+            void setReturnType(VType vtype)
+            {
+                _return_type = vtype;
             }
 
             ServiceDescribe::ptr build()
@@ -191,8 +201,9 @@ namespace suprpc
         {
         public:
             using ptr = std::shared_ptr<RpcRouter>;
-            void onRpcRouter(const BaseConnection::ptr &conn,
-                             RpcRequest::ptr &request)
+            RpcRouter():_svr_manager(std::make_shared<ServiceManager>()){}
+            void onRpcRequest(const BaseConnection::ptr &conn,
+                             std::shared_ptr<RpcRequest> &request)
             {
                 auto service = _svr_manager->select(request->method());
                 if (service.get() == nullptr)
