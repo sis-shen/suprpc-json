@@ -132,7 +132,7 @@ namespace suprpc
         std::string first;
         int second;
 
-        bool operator==(const Address &addr)
+        bool operator==(const Address &addr) const
         {
             return addr.first == first && addr.second == second;
         }

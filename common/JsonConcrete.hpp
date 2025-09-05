@@ -2,6 +2,7 @@
  * @file JsonConcrete
  * @brief 消息抽象的Json实现
  */
+#pragma once
 
 #include "Base.hpp"
 #include "JsonProto.hpp"

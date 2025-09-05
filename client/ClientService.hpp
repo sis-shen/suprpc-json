@@ -116,7 +116,7 @@ namespace suprpc
 
             bool serviceDiscovery(const BaseConnection::ptr &conn, const std::string &method, Address &host)
             {
-                std::unique_lock<std::mutex> lock(_mutex);
+                {std::unique_lock<std::mutex> lock(_mutex);
                 auto it = _method_hosts.find(method);
                 if (it != _method_hosts.end())
                 {
@@ -125,7 +125,7 @@ namespace suprpc
                         host = it->second->chooseHost();
                         return true;
                     }
-                }
+                }}
 
                 auto msg_req = MessageFactory::create<ServiceRequest>();
                 msg_req->setId(uuid());

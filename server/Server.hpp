@@ -2,7 +2,7 @@
  * @file Server.hpp
  * @brief 服务器类封装
  */
-
+#pragma once
  #include "../common/Dispatcher.hpp"
  #include "../client/Client.hpp"
  #include "../client/ClientTopic.hpp"

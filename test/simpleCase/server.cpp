@@ -2,12 +2,14 @@
 #include "../../server/Server.hpp"
 
 void Add(const Json::Value&req,Json::Value&rsp) {
+    SUP_LOG_DEBUG("触发回调,参数 {} ,{}",req["num1"].asInt(),req["num2"].asInt());
     int num1 = req["num1"].asInt();
     int num2 = req["num2"].asInt();
     rsp = num1 + num2;
 }
 
 int main() {
+    suprpc::init_logger(false,"",spdlog::level::level_enum::trace);
     std::unique_ptr<suprpc::server::SvrDescbFactory> desc_factory(
         new suprpc::server::SvrDescbFactory()
     );

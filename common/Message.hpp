@@ -2,7 +2,7 @@
  * @file Message.hpp
  * @brief 针对不同类型的消息的封装
  */
-
+#pragma once
 #include "Base.hpp"
 #include "DataTypes.hpp"
 #include "JsonConcrete.hpp"
@@ -178,6 +178,7 @@ namespace suprpc
             Address addr;
             addr.first = _body[KEY_HOST][KEY_HOST_IP].asString();
             addr.second = _body[KEY_HOST][KEY_HOST_PORT].asInt();
+            return addr;
         }
 
         void setHost(const Address &addr)
@@ -211,6 +212,7 @@ namespace suprpc
                 SUP_LOG_ERROR("RPC响应中无Rpc调用结果，或者结果类型错误！");
                 return false;
             }
+            return true;
         }
 
         Json::Value result()
@@ -336,7 +338,7 @@ namespace suprpc
             case MType::RSP_SERVICE:
                 return std::make_shared<ServiceResponse>();
             }
-            return std::make_shared<BaseMessage>();
+            return BaseMessage::ptr();
         }
 
         template <class T, class... Args>

@@ -19,7 +19,8 @@ namespace suprpc
     public:
         using ptr = std::shared_ptr<Callback>;
         virtual void onMessage(const BaseConnection::ptr &conn,
-                               BaseMessage::ptr &msg);
+                               BaseMessage::ptr &msg) = 0;
+        virtual ~Callback(){}
     };
 
     /**
@@ -34,12 +35,14 @@ namespace suprpc
         using MessageCallback = std::function<void(const BaseConnection::ptr &conn,
                                                    std::shared_ptr<T> &msg)>;
         CallbackT(const MessageCallback &handler) : _handler(handler) {}
-        void onMessage(const BaseConnection::ptr &conn,
-                       BaseMessage::ptr &msg)
+        virtual void onMessage(const BaseConnection::ptr &conn,
+                       BaseMessage::ptr &msg) override
         {
             auto typemsg = std::dynamic_pointer_cast<T>(msg);
             _handler(conn, typemsg);
         }
+
+        ~CallbackT(){}
 
     private:
         MessageCallback _handler;

@@ -1,9 +1,15 @@
-.PHONY:all
-all: test
+.PHONY: clean rebuild
 
-test: test.cpp
-	g++ -o $@ $^
+rebuild: clean build
+	@cd build && cmake .. && make -j2 && cd .. && cp ./build/server ./server && mkdir logs
 
-.PHONY:clean
 clean:
-	rm -f test
+	rm -f server 
+	rm -rf build logs
+
+build:
+	mkdir -p build 
+
+.PHONY:cleandoc
+cleandoc:
+	rm -rf ./doc/*

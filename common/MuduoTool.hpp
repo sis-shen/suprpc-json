@@ -111,6 +111,7 @@ namespace suprpc
             int32_t body_len = total_len - idlen - idlenFieldLength - mtypeFieldLength;
             std::string id = buf->retrieveAsString(idlen);
             std::string body = buf->retrieveAsString(body_len);
+            SUP_LOG_TRACE("接收到的报文主体为: {}",body);
             msg = MessageFactory::create(mtype);
             if (msg.get() == nullptr)
             {
@@ -289,12 +290,14 @@ namespace suprpc
                 }
                 BaseMessage::ptr msg;
                 bool ret = _protocol->onMessage(base_buf, msg);
+                //msg已变成response
                 if (ret == false)
                 {
                     conn->shutdown();
                     SUP_LOG_ERROR("缓冲区中数据错误");
                     return;
                 }
+                SUP_LOG_TRACE("数据已处理，返回报文为 {}",msg->serialize());
                 BaseConnection::ptr base_conn;
                 {
                     std::unique_lock<std::mutex> lock(_mutex);
@@ -378,6 +381,7 @@ namespace suprpc
                 return false;
             }
             _conn->send(msg);
+            return true;
         }
 
         virtual BaseConnection::ptr connection() override

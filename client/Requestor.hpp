@@ -67,6 +67,7 @@ namespace suprpc
                     return false;
                 }
                 conn->send(req);
+                SUP_LOG_TRACE("消息已发送");
                 async_rsp = rdp->response.get_future();
                 return true;
             }

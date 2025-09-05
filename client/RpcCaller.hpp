@@ -36,6 +36,7 @@ namespace suprpc{
                         BaseMessage::ptr rsp_msg;
 
                         //2.发送请求
+                        SUP_LOG_DEBUG("开始发送rpc调用请求...");
                         bool ret = _requestor->send(conn,std::dynamic_pointer_cast<BaseMessage>(req_msg),rsp_msg);
 
                         if(ret == false){

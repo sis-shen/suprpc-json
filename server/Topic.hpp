@@ -175,7 +175,7 @@ namespace suprpc
 
                 void removeTopic(const std::string &topic_name)
                 {
-                    std::unique_lock(topic_name);
+                    std::unique_lock<std::mutex> lock(_mutex);
                     _topics.erase(topic_name);
                 }
             };

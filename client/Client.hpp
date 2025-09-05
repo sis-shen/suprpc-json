@@ -60,7 +60,7 @@ namespace suprpc
             using ptr = std::shared_ptr<DiscoveryClient>;
             DiscoveryClient(const std::string &ip, int port,
                             const Discoverer::OfflineCallback &cb) : _requestor(std::make_shared<Requestor>()),
-                                                                     _discoverer(std::make_shared<client::Discoverer>()),
+                                                                     _discoverer(std::make_shared<client::Discoverer>(_requestor,cb)),
                                                                      _dispatcher(std::make_shared<Dispatcher>())
             {
                 auto rsp_cb = std::bind(&client::Requestor::onResponse,
@@ -104,6 +104,7 @@ namespace suprpc
                   _dispatcher(std::make_shared<Dispatcher>()),
                   _caller(std::make_shared<client::RpcCaller>(_requestor))
             {
+                SUP_LOG_TRACE("RpcClient开始构造函数");
                 auto rsp_cb = std::bind(&client::Requestor::onResponse,
                                         _requestor.get(),
                                         std::placeholders::_1, std::placeholders::_2);
@@ -241,7 +242,7 @@ namespace suprpc
             using ptr = std::shared_ptr<TopicClient>;
             TopicClient(const std::string &ip, int port) : _requestor(std::make_shared<Requestor>()),
                                                            _dispatcher(std::make_shared<Dispatcher>()),
-                                                           _topic_manager(std::make_shared<TopicManager>())
+                                                           _topic_manager(std::make_shared<TopicManager>(_requestor))
             {
                 auto rsp_cb = std::bind(&Requestor::onResponse, _requestor.get(),
                                         std::placeholders::_1, std::placeholders::_2);
